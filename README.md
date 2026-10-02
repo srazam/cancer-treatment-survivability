@@ -4,6 +4,7 @@
 A python application that predicts survivability of cancer patient's based on medical information, selected treatment option, and response to treatment.
 
 ## Repository Structure
+```
 cancer-treatment-survivability
 │   .gitignore                      
 │   interface.py                            # Interface for users to enter patient information and recieve survivability prediction
@@ -21,6 +22,7 @@ cancer-treatment-survivability
         final_model.pkl                     # Saved Decision Tree Classifier pickle file
         model.py                            # Split data and hypertune/train Decision Tree Classifier
         tree_decisions.png                  # Decision tree path
+```
 
 ## Technologies Used and Requirements
 All dependencies can be found in `requirements.txt`. Used Kaggle API to download data from https://www.kaggle.com/datasets/gauravsrivastav2507/ehr-dataset, Scikit-Learn for Decision Tree Classifier model, and nicegui for developing interface.
