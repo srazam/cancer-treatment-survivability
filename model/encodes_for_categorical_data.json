@@ -1,0 +1,24 @@
+{
+    "Gender": {
+        "Female": 0,
+        "Male": 1
+    },
+    "Tumor_Type": {
+        "Benign": 0,
+        "Malignant": 1
+    },
+    "Biopsy_Result": {
+        "Negative": 0,
+        "Positive": 1
+    },
+    "Treatment": {
+        "Chemotherapy": 0,
+        "Radiation Therapy": 1,
+        "Surgery": 2
+    },
+    "Response_to_Treatment": {
+        "Complete Response": 0,
+        "No Response": 1,
+        "Partial Response": 2
+    }
+}

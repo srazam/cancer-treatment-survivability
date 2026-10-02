@@ -6,19 +6,10 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import GridSearchCV
 import joblib
 import pandas as pd
+import encode_data
 
 df = pd.read_csv('../data/cancer_diagnosis_data.csv')
-encodeDf = df.copy()
-
-label_encoder = LabelEncoder()
-categoricalData = ['Gender', 'Tumor_Type', 'Biopsy_Result', 'Treatment', 'Response_to_Treatment']
-
-for category in categoricalData:
-    new_labels = label_encoder.fit_transform(df[category])
-    encodeDf[category] = new_labels
-
-    print(f"Original vallues for {category}: {df[category].unique()}")
-    print(f"Encoded vallues for {category}: {encodeDf[category].unique()}\n")
+encodeDf = encode_data.encode_data(df, fit=True)
 
 x = encodeDf[['Age', 'Gender', 'Tumor_Size(cm)', 'Tumor_Type', 'Biopsy_Result', 'Treatment', 'Response_to_Treatment']]
 y = encodeDf['Survival_Status']
