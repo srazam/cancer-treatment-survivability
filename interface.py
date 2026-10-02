@@ -45,7 +45,7 @@ def submit():
             return
 
         label.text = "Evaluating..."
-        print(evaluation.evaluate_patient(patient_data))
+        label.text = f"Survivability status: {evaluation.evaluate_patient(patient_data)[0]}"
 
 
 
