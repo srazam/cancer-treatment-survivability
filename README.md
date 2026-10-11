@@ -46,7 +46,7 @@ name-of-venv/Scripts/Activate.ps1   # Windows
 
 Download dependencies to virtual environment:
 ```
-python -m pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 Run the UI to input patient information for model prediction:
