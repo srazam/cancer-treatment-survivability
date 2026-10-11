@@ -17,8 +17,8 @@
         "Surgery": 2
     },
     "Response_to_Treatment": {
-        "Complete Response": 0,
-        "No Response": 1,
-        "Partial Response": 2
+        "No Response": 0,
+        "Partial Response": 1,
+        "Complete Response": 2
     }
 }
