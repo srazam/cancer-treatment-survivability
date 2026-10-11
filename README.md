@@ -57,7 +57,11 @@ python interface.py
 ## Miscellaneous Information
 Hypertuned model accuracy was brought to 51%, with an entropy creterion, a max depth of 3, and a minimum leaf sample of 5. 
 
-Where I used AI Assistance from GitHub CoPilot: to understand and properly encode data
+Where I used AI Assistance from GitHub CoPilot: 
+To understand and properly encode data
 - model.py (for updating interaction with encode_data module)
 - evaluation.py (for updating interaction with encode_data module and converting respective numerical values)
 - encode_data.py (for properly encoding data and saving encodes so that they can be used for data to be predicted)
+
+To understand why information was not being properly extracted from tabs on the interface:
+- interface.py (for updating variable names for the survivability classification tab)
