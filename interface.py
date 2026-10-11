@@ -65,4 +65,34 @@ with ui.tab_panels(tabs, value='s').classes('w-full'):
         t_tumor_type = ui.select(['Tumor Type', 'Benign', 'Malignant'], value = 'Tumor Type')
         t_biopsy_result = ui.select(['Biopsy Result', 'Positive', 'Negative'], value = "Biopsy Result")
 
+        def compare_treatment_options():
+            patient_data = {
+                'Age': t_age.value,
+                'Gender': t_sex.value,
+                'Tumor_Size(cm)': t_tumor_size.value,
+                'Tumor_Type': t_tumor_type.value,
+                'Biopsy_Result': t_biopsy_result.value
+            }
+             
+            try:
+                patient_data['Age'] = int(t_age.value)
+            except:
+                return 'Invalid age value'
+
+            try:
+                patient_data['Tumor_Size(cm)'] = float(t_tumor_size.value)
+            except:
+                return 'Invalid tumor size value'
+
+            for key in patient_data.keys():
+                if key == 'Age' or key == 'Tumor_Size(cm)':
+                    continue
+                if key.replace("_", " ").lower() == (patient_data[key]).lower():
+                    return f"Invalid {key.replace("_", " ").lower()} value"
+
+            results = evaluation.compare_treatment_options(patient_data)
+            return results
+
+        ui.button('Compare options', on_click=lambda: ui.label(compare_treatment_options()))
+
 ui.run()

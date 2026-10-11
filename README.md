@@ -65,3 +65,7 @@ To understand and properly encode data
 
 To understand why information was not being properly extracted from tabs on the interface:
 - interface.py (for updating variable names for the survivability classification tab)
+
+To understand how to do partial prediction to get treatments that would best give positive survivability:
+- evaluation.py (Including parts of the compare_treatment_options function to get probability predictions for each target class)
+- interface.py (Including parts of compare_treatment_options function but mainly removed to just reuse code from other tab)
