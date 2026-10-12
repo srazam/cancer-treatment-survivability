@@ -1,98 +1,37 @@
 from nicegui import ui
-from model import evaluation
+import evaluation
 
-ui.page_title("Cancer Treatment Survivability Classification System")
+features = ["radius_mean","texture_mean","perimeter_mean","area_mean","smoothness_mean","compactness_mean","concavity_mean",
+            "concave points_mean","symmetry_mean","fractal_dimension_mean","radius_se","texture_se","perimeter_se","area_se",
+            "smoothness_se","compactness_se","concavity_se","concave points_se","symmetry_se","fractal_dimension_se","radius_worst",
+            "texture_worst","perimeter_worst","area_worst","smoothness_worst","compactness_worst","concavity_worst","concave points_worst",
+            "symmetry_worst","fractal_dimension_worst"]
+
+ui.page_title("Cancer Tumor Classification System")
 ui.label("Classification System").style('font-size: 200%')
 
-def submit(age, sex, tumor_size, tumor_type, biopsy_result, treatment, response_to_treatment):
-    patient_data = {
-        'Age': age.value,
-        'Gender': sex.value,
-        'Tumor_Size(cm)': tumor_size.value,
-        'Tumor_Type': tumor_type.value,
-        'Biopsy_Result': biopsy_result.value,
-        'Treatment': treatment.value,
-        'Response_to_Treatment': response_to_treatment.value
-    }
+ui.html('<p>Enter the following information for your patient:</p>')
+ui.html('<p>Fields left blank will not be accounted for in prediction</p>')
+with ui.grid(columns = 5):
+    patient_data = { }
+    for i in features:
+        patient_data[i] = ui.input(label = i)
 
-    for key in patient_data.keys():
-        if key == 'Age':
-            try:
-                patient_data['Age'] = int(patient_data['Age'])
-            except:
-                return "Invalid age value"
-        elif patient_data["Gender"] == 'Sex':
-            return "Invalid sex value" 
-        elif key == 'Tumor_Size(cm)':
-            try:
-                patient_data['Tumor_Size(cm)'] = float(patient_data['Tumor_Size(cm)'])
-            except:
-                return "Invalid tumor size value"
-        elif key.replace("_", " ").lower() == (patient_data[key]).lower():
-            return f"Invalid {key.replace("_", " ").lower()} value"
+ui.button('Submit',on_click=lambda: result.set_text(submit(patient_data)))
+result = ui.label()
+feats_used = ui.label()
 
-    survivability_status = evaluation.evaluate_patient(patient_data)[0]
-    if survivability_status == "Deceased":
-        return "Patient may not respond well to treatment. Re-evaluate treatment type."
-    else:
-        return "Patient will respond well to treatment!"
+def submit(data):
+    patient_values = {}
+    for key, input_field in data.items():
+        patient_values[key] = (0 if input_field.value == '' else float(input_field.value))
+    
+    feat_only = []
+    for key, value in patient_values.items():
+        if value != 0:
+            feat_only.append(key)
+    feats_used.set_text("Values accounting for: " + ", ".join(feat_only))
 
-with ui.tabs() as tabs:
-    ui.tab('s', label = 'Survivability Classification')
-    ui.tab('t', label = 'Treatment Recommendation')
-
-with ui.tab_panels(tabs, value='s').classes('w-full'):
-    with ui.tab_panel('s'):
-        ui.html('<p>Enter the following information for your patient:</p>')
-
-        s_age = ui.input(label = "Age")
-        s_sex = ui.select(['Sex', 'Male', 'Female'], value = "Sex")
-        s_tumor_size = ui.input(label = "Tumor Size (in cm)")
-        s_tumor_type = ui.select(['Tumor Type', 'Benign', 'Malignant'], value = 'Tumor Type')
-        s_biopsy_result = ui.select(['Biopsy Result', 'Positive', 'Negative'], value = "Biopsy Result")
-        s_treatment = ui.select(['Treatment', 'Surgery', 'Radiation Therapy', 'Chemotherapy'], value = "Treatment")
-        s_response_to_treatment = ui.select(['Response to Treatment', 'No Response', 'Complete Response', 'Partial Response'], value = "Response to Treatment")
-        
-        ui.button('Submit',on_click=lambda: ui.label(submit(s_age, s_sex, s_tumor_size, s_tumor_type, s_biopsy_result, s_treatment, s_response_to_treatment)))
-
-
-    with ui.tab_panel('t'):
-        ui.html('<p>Enter the following information for your patient:</p>')
-        
-        t_age = ui.input(label = "Age")
-        t_sex = ui.select(['Sex', 'Male', 'Female'], value = "Sex")
-        t_tumor_size = ui.input(label = "Tumor Size (in cm)")
-        t_tumor_type = ui.select(['Tumor Type', 'Benign', 'Malignant'], value = 'Tumor Type')
-        t_biopsy_result = ui.select(['Biopsy Result', 'Positive', 'Negative'], value = "Biopsy Result")
-
-        def compare_treatment_options():
-            patient_data = {
-                'Age': t_age.value,
-                'Gender': t_sex.value,
-                'Tumor_Size(cm)': t_tumor_size.value,
-                'Tumor_Type': t_tumor_type.value,
-                'Biopsy_Result': t_biopsy_result.value
-            }
-             
-            try:
-                patient_data['Age'] = int(t_age.value)
-            except:
-                return 'Invalid age value'
-
-            try:
-                patient_data['Tumor_Size(cm)'] = float(t_tumor_size.value)
-            except:
-                return 'Invalid tumor size value'
-
-            for key in patient_data.keys():
-                if key == 'Age' or key == 'Tumor_Size(cm)':
-                    continue
-                if key.replace("_", " ").lower() == (patient_data[key]).lower():
-                    return f"Invalid {key.replace("_", " ").lower()} value"
-
-            results = evaluation.compare_treatment_options(patient_data)
-            return results
-
-        ui.button('Compare options', on_click=lambda: ui.label(compare_treatment_options()))
+    return evaluation.diagnose(patient_values, feat_only)
 
 ui.run()
