@@ -10,22 +10,18 @@ cancer-treatment-survivability
 │   interface.py                            # Interface for users to enter patient information and recieve survivability prediction
 │   README.md
 │   requirements.txt                        # Dependencies required for project
+|   evaluation.py                           # Predict survivability status given data point
+|   database.py                             # Implement SQL-Alchemy database to store patient information
 │   
 ├───data
-│       cancer_diagnosis_data.csv           # Data downloaded from Kaggle data
+│       Cancer_Data.csv                     # Data downloaded from Kaggle data
 │       dataExtract.ipynb                   # Extract data from Kaggle using Kaggle API and perform data exploration
-│       
-└───model
-        encodes_for_categorical_data.json   # Encodings for categorical data fields
-        encode_data.py                      # Generate encodings for categorical data and apply encodings for datat to be predicted
-        evaluation.py                       # Predict survivability status given data point
-        final_model.pkl                     # Saved Decision Tree Classifier pickle file
-        model.py                            # Split data and hypertune/train Decision Tree Classifier
-        tree_decisions.png                  # Decision tree path
+│       feature_ranges.json                 # Bins and counts from histogram graphs for each feature per target class
+│       preproc_and_analysis.ipynb          # Remove empty column and create graphs/histograms 
 ```
 
 ## Technologies Used and Requirements
-All dependencies can be found in `requirements.txt`. Used Kaggle API to download data from https://www.kaggle.com/datasets/gauravsrivastav2507/ehr-dataset, Scikit-Learn for Decision Tree Classifier model, and nicegui for developing interface.
+All dependencies can be found in `requirements.txt`. Used Kaggle API to download data from https://www.kaggle.com/datasets/erdemtaha/cancer-data, and nicegui for developing interface.
 
 ## Installation and Usage Instructions
 First clone this repository on your local machine:
@@ -55,8 +51,6 @@ python interface.py
 ```
 
 ## Miscellaneous Information
-Hypertuned model accuracy was brought to 51%, with an entropy creterion, a max depth of 3, and a minimum leaf sample of 5. 
-
 Where I used AI Assistance from GitHub CoPilot: 
 To understand and properly encode data
 - model.py (for updating interaction with encode_data module)
@@ -69,3 +63,6 @@ To understand why information was not being properly extracted from tabs on the 
 To understand how to do partial prediction to get treatments that would best give positive survivability:
 - evaluation.py (Including parts of the compare_treatment_options function to get probability predictions for each target class)
 - interface.py (Including parts of compare_treatment_options function but mainly removed to just reuse code from other tab)
+
+To understand SQL Alchemy
+- database.py (To know how to interact with the SQL server, mainly overwrote things)
