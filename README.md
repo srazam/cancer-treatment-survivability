@@ -1,7 +1,7 @@
-# Cancer Treatment Survivability Prediction Model Interface
+# Cancer Tumor Classification System
 
 ## Project Description
-A python application that predicts survivability of cancer patient's based on medical information, selected treatment option, and response to treatment.
+A python application that predicts whether a tumor is benign and malignant survivability based on a patient's medical information.
 
 ## Repository Structure
 ```
