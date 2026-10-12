@@ -1,11 +1,12 @@
 from pathlib import Path
 import pandas as pd
 import json
+import database
 
 data_file = Path(__file__).parent / 'data/feature_ranges.json'
 data = json.loads(data_file.read_text(encoding='utf-8'))
 
-def diagnose(patient_data, feats):
+def diagnose(patient_data, feats, id):
     ranges = {}
     ranges["M"] = {}
     ranges["B"] = {}
@@ -39,10 +40,12 @@ def diagnose(patient_data, feats):
                             m_score += 1
                 except:
                     continue
-                        
+
         if m_score > b_score:
+            database.add_patient_info(patient_data, id, 'M')
             return 'M'
         else:
+            database.add_patient_info(patient_data, id, 'B')
             return 'B'
 
     except:
