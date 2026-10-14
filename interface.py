@@ -11,22 +11,35 @@ features = ["radius_mean","texture_mean","perimeter_mean","area_mean","smoothnes
             "texture_worst","perimeter_worst","area_worst","smoothness_worst","compactness_worst","concavity_worst","concave points_worst",
             "symmetry_worst","fractal_dimension_worst"]
 
-def get_rows():
+def get_table():
     table = database.return_table()
     
     final_rows = []
+    non_empty_feat = []
+    final_cols = []
+    
     for row in table:
         row_list = list(row)
         ith_row = {}
+
         ith_row['id'] = row_list[0]
         ith_row['diagnosis'] = row_list[1]
 
-        for feat, i in zip(features, range(2, len(features))):
+        for i, feat in enumerate(features, start = 2):
             ith_row[feat] = row_list[i]
+            if row_list[i] != 0: 
+                non_empty_feat.append(feat) 
 
         final_rows.append(ith_row)
 
-    return final_rows
+    final_cols.append({'name': 'id', 'label': 'id', 'field': 'id'})
+    final_cols.append({'name': 'diagnosis', 'label': 'diagnosis', 'field': 'diagnosis'})
+
+    for feat in features:
+        if feat in non_empty_feat:
+            final_cols.append({'name': feat, 'label': feat, 'field': feat})
+
+    return final_rows, final_cols
 
 def submit(data, id):
     patient_values = {}
@@ -41,7 +54,9 @@ def submit(data, id):
 
     result.set_text(evaluation.diagnose(patient_values, feat_only, id))
 
-    info_table.rows = get_rows()
+    update_rows, update_cols = get_table()
+    info_table.rows = update_rows
+    info_table.columns = update_cols
     info_table.update()
 
 ui.page_title("Cancer Tumor Classification System")
@@ -59,18 +74,8 @@ feats_used = ui.label()
 ui.button('Submit',on_click=lambda: submit(patient_data, next(patient_ids)))
 
 table_columns = []
-table_columns.append({'name': 'id', 'label': 'id', 'field': 'id'})
-table_columns.append({'name': 'diagnosis', 'label': 'diagnosis', 'field': 'diagnosis'})
 
-for i in features:
-    table_columns.append({
-        'name': i,
-        'label': i,
-        'field': i
-    })
-
-info_table = ui.table(rows=get_rows(), columns=table_columns)
-
-
+rows, cols = get_table()
+info_table = ui.table(rows = rows, columns=cols)
 
 ui.run()

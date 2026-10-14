@@ -66,3 +66,6 @@ To understand how to do partial prediction to get treatments that would best giv
 
 To understand SQL Alchemy
 - database.py (To know how to interact with the SQL server, mainly overwrote things)
+
+To assist in debugging of table preview on interface
+- interface.py (Using enumerate instead of zip to iterate through the features and understanding that updating columns for a table in nicegui is not overwriting currently existing columns)
