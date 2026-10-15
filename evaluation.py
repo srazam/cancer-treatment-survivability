@@ -17,15 +17,17 @@ def diagnose(patient_data, feats, id):
         for i in feats:
             for key, value in data["malignant"][i].items():
                 start, end = key.split("-")
-                if patient_data[i] >= float(start) and patient_data[i] <= float(end):
+                if patient_data[i] >= float(start) and patient_data[i] <= float(end) and int(value) != 0:
                     m_score += 1
                     ranges["M"][i] = {"start": start, "end": end, "count":value}
 
             for key, value in data["benign"][i].items():
                 start, end = key.split("-")
-                if patient_data[i] >= float(start) and patient_data[i] <= float(end):
+                if patient_data[i] >= float(start) and patient_data[i] <= float(end) and int(value) != 0:
                     b_score += 1
                     ranges["B"][i] = {"start": start, "end": end, "count":value}
+
+        print(ranges)
 
         if m_score == b_score:
             for i in feats:
@@ -36,7 +38,7 @@ def diagnose(patient_data, feats, id):
                     if m_interval.overlaps(b_interval):
                         if ranges["B"][i]["count"] > ranges["M"][i]["count"]:
                             b_score += 1 
-                        else:
+                        elif ranges["B"][i]["count"] < ranges["M"][i]["count"]:
                             m_score += 1
                 except:
                     continue
@@ -44,9 +46,12 @@ def diagnose(patient_data, feats, id):
         if m_score > b_score:
             database.add_patient_info(patient_data, id, 'M')
             return 'M'
-        else:
+        elif b_score > m_score:
             database.add_patient_info(patient_data, id, 'B')
             return 'B'
+        else:
+            database.add_patient_info(patient_data, id, 'Cannot be determined')
+            return 'Cannot be determined'
 
     except:
         return 'Invalid data value entered'
