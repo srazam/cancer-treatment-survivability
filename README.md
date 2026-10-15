@@ -50,7 +50,12 @@ Run the UI to input patient information for model prediction:
 python interface.py
 ```
 
+## Test
+Tests are written to check that evaluations are done correctly 
+
 ## Miscellaneous Information
+When evaluating a patient's info, we will just assume benign even if scores are still equivalent after comparing overlapping intervals 
+
 Where I used AI Assistance from GitHub CoPilot: 
 To understand and properly encode data
 - model.py (for updating interaction with encode_data module)
