@@ -17,23 +17,21 @@ def diagnose(patient_data, feats, id):
         for i in feats:
             for key, value in data["malignant"][i].items():
                 start, end = key.split("-")
-                if patient_data[i] >= float(start) and patient_data[i] <= float(end) and int(value) != 0:
+                if patient_data[i] >= float(start) and patient_data[i] <= float(end) and value != 0.0:
                     m_score += 1
-                    ranges["M"][i] = {"start": start, "end": end, "count":value}
+                    ranges["M"][i] = {"start": float(start), "end": float(end), "count":value}
 
             for key, value in data["benign"][i].items():
                 start, end = key.split("-")
-                if patient_data[i] >= float(start) and patient_data[i] <= float(end) and int(value) != 0:
+                if patient_data[i] >= float(start) and patient_data[i] <= float(end) and value != 0.0:
                     b_score += 1
-                    ranges["B"][i] = {"start": start, "end": end, "count":value}
-
-        print(ranges)
+                    ranges["B"][i] = {"start": float(start), "end": float(end), "count":value}
 
         if m_score == b_score:
             for i in feats:
                 try:
-                    m_interval = pd.Interval(ranges["M"][i][start], ranges["M"][i][end])
-                    b_interval = pd.Interval(ranges["B"][i][start], ranges["B"][i][end])
+                    m_interval = pd.Interval(ranges["M"][i]["start"], ranges["M"][i]["end"])
+                    b_interval = pd.Interval(ranges["B"][i]["start"], ranges["B"][i]["end"])
 
                     if m_interval.overlaps(b_interval):
                         if ranges["B"][i]["count"] > ranges["M"][i]["count"]:
